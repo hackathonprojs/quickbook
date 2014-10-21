@@ -12,9 +12,18 @@
 <%@ page import="me.xbt.common.*" %>
 
 <%
-// get revenue report.  
-
-// get one report and see.  
+		// get revenue report.  
+		
+		// get inputs
+		String startdate = "2014-10-01"; // default value
+		String enddate = "2014-10-20"; // default value
+		if (request.getParameter("startdate") != null && !"".equals(request.getParameter("startdate"))) {
+			startdate = request.getParameter("startdate");
+		}
+		if (request.getParameter("enddate") != null && !"".equals(request.getParameter("enddate"))) {
+			enddate = request.getParameter("enddate");
+		}
+		
 
 		String netIncome = "";
 		
@@ -34,8 +43,8 @@
  		
  		ReportService rService = new ReportService(context);
  		rService.setAccounting_method("Accrual");
- 		rService.setStart_date("2014-10-01");
- 		rService.setEnd_date("2014-10-20");
+ 		rService.setStart_date(startdate);
+ 		rService.setEnd_date(enddate);
  		
  		Report report = rService.executeReport(ReportName.CASHFLOW.toString());
  		
@@ -65,5 +74,5 @@
  		String sNetIncome = colData.get(1).getValue();
  		System.out.println(sNetIncome);
 %>
-<%=sNetIncome %>
+<%=sNetIncome%>
 

@@ -19,5 +19,14 @@
     <url-pattern>/hello</url-pattern>
   </servlet-mapping>
 
+  <servlet>
+    <servlet-name>revenue</servlet-name>
+    <servlet-class>me.xbt.RevenueServlet</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>revenue</servlet-name>
+    <url-pattern>/revenue</url-pattern>
+  </servlet-mapping>
 
 </web-app>

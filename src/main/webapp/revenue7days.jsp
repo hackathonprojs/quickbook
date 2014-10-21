@@ -138,32 +138,32 @@ try {
 [
 
 {
-	day: 1,
-	revenue: <%=income20141015%>,
+	"day": 1,
+	"revenue": <%=income20141015%>
 },
 {
-	day: 2,
-	revenue: <%=income20141016%>,
+	"day": 2,
+	"revenue": <%=income20141016%>
 },
 {
-	day: 3,
-	revenue: <%=income20141017%>,
+	"day": 3,
+	"revenue": <%=income20141017%>
 },
 {
-	day: 4,
-	revenue: <%=income20141018%>,
+	"day": 4,
+	"revenue": <%=income20141018%>
 },
 {
-	day: 5,
-	revenue: <%=income20141019%>,
+	"day": 5,
+	"revenue": <%=income20141019%>
 },
 {
-	day: 6,
-	revenue: <%=income20141020%>,
+	"day": 6,
+	"revenue": <%=income20141020%>
 },
 {
-	day: 7,
-	revenue: <%=income20141021%>,
-},
+	"day": 7,
+	"revenue": <%=income20141021%>
+}
 ]
 

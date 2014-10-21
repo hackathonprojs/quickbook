@@ -42,7 +42,7 @@ System.out.println(resultCustomer.getFullyQualifiedName());
 </head>
 <body>
 
-
+<%=resultCustomer.getFullyQualifiedName()%>
 
 </body>
 </html>

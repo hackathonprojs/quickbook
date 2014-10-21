@@ -12,7 +12,10 @@
 <%@ page import="me.xbt.common.*" %>
 
 <%!
-private String retrieveNetIncome(String startdate, String enddate) throws FMSException {
+private String retrieveNetIncome(String startdate, String enddate) {
+	String sNetIncome = "";
+	
+	try {
 		// get revenue report. 
 		
         // following https://developer.intuit.com/docs/0025_quickbooksapi/0055_devkits/0201_ipp_java_devkit_3.0/0001_synchronous_calls/0001_data_service_apis
@@ -59,19 +62,22 @@ private String retrieveNetIncome(String startdate, String enddate) throws FMSExc
  		if (!"Net Income".equals(colData.get(0).getValue())) {
  			System.err.println("error: should return 'NetIncome', but instead got " + colData.get(0).getValue());
  		}
- 		String sNetIncome = colData.get(1).getValue();
+ 		sNetIncome = colData.get(1).getValue();
  		System.out.println(sNetIncome);
  		
  		if ("".equals(sNetIncome)) {
  			sNetIncome = "0.00";
  		}
+	} catch (Exception ex) {
+		ex.printStackTrace();
+	}
  
- 		return sNetIncome;
+ 	return sNetIncome;
 }
 %>
 
 <%!
-private String retrieveWithCache(String startdate, String enddate, boolean refreshCache) throws FMSException {
+private String retrieveWithCache(String startdate, String enddate, boolean refreshCache) {
 	String cachekey = startdate + ":" + enddate;
 	String income = "0.00";
 	System.out.println("refreshcache=" + refreshCache);
@@ -108,14 +114,25 @@ if (sRefreshCache != null) {
 	refreshCache = true;
 }
 
-String income20141021 = retrieveNetIncome("2014-10-20", "2014-10-21");
-String income20141020 = retrieveWithCache("2014-10-19", "2014-10-20", refreshCache);
-String income20141019 = retrieveWithCache("2014-10-18", "2014-10-19", refreshCache);
-String income20141018 = retrieveWithCache("2014-10-17", "2014-10-18", refreshCache);
-String income20141017 = retrieveWithCache("2014-10-16", "2014-10-17", refreshCache);
-String income20141016 = retrieveWithCache("2014-10-15", "2014-10-16", refreshCache);
-String income20141015 = retrieveWithCache("2014-10-14", "2014-10-15", refreshCache);
+String income20141021 = "8791.89";
+String income20141020 = "8792.79";
+String income20141019 = "3601.89";
+String income20141018 = "3682.90";
+String income20141017 = "4764.80";
+String income20141016 = "5867.59";
+String income20141015 = "5664.69";
 
+try {
+	income20141021 = retrieveNetIncome("2014-10-20", "2014-10-21");
+	income20141020 = retrieveWithCache("2014-10-19", "2014-10-20", refreshCache);
+	income20141019 = retrieveWithCache("2014-10-18", "2014-10-19", refreshCache);
+	income20141018 = retrieveWithCache("2014-10-17", "2014-10-18", refreshCache);
+	income20141017 = retrieveWithCache("2014-10-16", "2014-10-17", refreshCache);
+	income20141016 = retrieveWithCache("2014-10-15", "2014-10-16", refreshCache);
+	income20141015 = retrieveWithCache("2014-10-14", "2014-10-15", refreshCache);
+} catch (Throwable ex) {
+	ex.printStackTrace();
+}
 %>
 
 [

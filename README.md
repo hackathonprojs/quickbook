@@ -20,5 +20,5 @@ http://localhost:8080/revenue.jsp?startdate=2014-09-01&enddate=2014-10-22
 
 30 days revenue
 http://localhost:8080/revenue30days.jsp
-
+http://localhost:8080/revenue30days.jsp?refreshCache=1
 

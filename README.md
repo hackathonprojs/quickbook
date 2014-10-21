@@ -11,4 +11,14 @@ First build with:
 Then run it with:
 
     $java -cp target/classes:target/dependency/* com.example.Main
+    or run Main.java from eclipse directly
+    
+## Usage
+
+revenue from certain date to another date
+http://localhost:8080/revenue.jsp?startdate=2014-09-01&enddate=2014-10-22
+
+30 days revenue
+http://localhost:8080/revenue30days.jsp
+
 

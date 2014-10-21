@@ -108,8 +108,7 @@ if (sRefreshCache != null) {
 	refreshCache = true;
 }
 
-String income20141022 = retrieveWithCache("2014-10-21", "2014-10-22", refreshCache);
-String income20141021 = retrieveWithCache("2014-10-20", "2014-10-21", refreshCache);
+String income20141021 = retrieveNetIncome("2014-10-20", "2014-10-21");
 String income20141020 = retrieveWithCache("2014-10-19", "2014-10-20", refreshCache);
 String income20141019 = retrieveWithCache("2014-10-18", "2014-10-19", refreshCache);
 String income20141018 = retrieveWithCache("2014-10-17", "2014-10-18", refreshCache);

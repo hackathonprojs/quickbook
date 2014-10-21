@@ -70,73 +70,202 @@ private String retrieveNetIncome(String startdate, String enddate) throws FMSExc
 }
 %>
 
-<%
-String income20141022 = retrieveNetIncome("2014-10-21", "2014-10-22");
-String income20141021 = retrieveNetIncome("2014-10-20", "2014-10-21");
-String income20141020 = retrieveNetIncome("2014-10-19", "2014-10-20");
-String income20141019 = retrieveNetIncome("2014-10-18", "2014-10-19");
-String income20141018 = retrieveNetIncome("2014-10-17", "2014-10-18");
-String income20141017 = retrieveNetIncome("2014-10-16", "2014-10-17");
-String income20141016 = retrieveNetIncome("2014-10-15", "2014-10-16");
-String income20141015 = retrieveNetIncome("2014-10-14", "2014-10-15");
-String income20141014 = retrieveNetIncome("2014-10-13", "2014-10-14");
-String income20141013 = retrieveNetIncome("2014-10-12", "2014-10-13");
-String income20141012 = retrieveNetIncome("2014-10-11", "2014-10-12");
-String income20141011 = retrieveNetIncome("2014-10-10", "2014-10-11");
-String income20141010 = retrieveNetIncome("2014-10-09", "2014-10-10");
-String income20141009 = retrieveNetIncome("2014-10-08", "2014-10-09");
-String income20141008 = retrieveNetIncome("2014-10-07", "2014-10-08");
-String income20141007 = retrieveNetIncome("2014-10-06", "2014-10-07");
-String income20141006 = retrieveNetIncome("2014-10-05", "2014-10-06");
-String income20141005 = retrieveNetIncome("2014-10-04", "2014-10-05");
-String income20141004 = retrieveNetIncome("2014-10-03", "2014-10-04");
-String income20141003 = retrieveNetIncome("2014-10-02", "2014-10-03");
-String income20141002 = retrieveNetIncome("2014-10-01", "2014-10-02");
-String income20141001 = retrieveNetIncome("2014-09-30", "2014-10-01");
-String income20140930 = retrieveNetIncome("2014-09-29", "2014-09-30");
-String income20140929 = retrieveNetIncome("2014-09-28", "2014-09-29");
-String income20140928 = retrieveNetIncome("2014-09-27", "2014-09-28");
-String income20140927 = retrieveNetIncome("2014-09-26", "2014-09-27");
-String income20140926 = retrieveNetIncome("2014-09-25", "2014-09-26");
-String income20140925 = retrieveNetIncome("2014-09-24", "2014-09-25");
-String income20140924 = retrieveNetIncome("2014-09-23", "2014-09-24");
-String income20140923 = retrieveNetIncome("2014-09-22", "2014-09-23");
-String income20140922 = retrieveNetIncome("2014-09-21", "2014-09-22");
-String income20140921 = retrieveNetIncome("2014-09-20", "2014-09-21");
+<%!
+private String retrieveWithCache(String startdate, String enddate, boolean refreshCache) throws FMSException {
+	String cachekey = startdate + ":" + enddate;
+	String income = "0.00";
+	System.out.println("refreshcache=" + refreshCache);
+	// if refreshCache is on, always hit quickbook then store in cache.  
+	if (refreshCache) {
+		income = retrieveNetIncome(startdate, enddate);
+		income = getDefault(income);
+		Cache.revenues.put(cachekey, income);
+	} else {
+		// else hit cache first.  if not there, hit quickbook and store in cache.  
+		income = Cache.revenues.get(cachekey);
+		if (income == null) {
+			income = retrieveNetIncome(startdate, enddate);
+			income = getDefault(income);
+			Cache.revenues.put(cachekey, income);
+		}
+		System.out.println("use cache");
+	}
+	
+	return income;
+}
 %>
 
-{
-2014-10-22: <%=income20141022%>,
-2014-10-21: <%=income20141021%>,
-2014-10-20: <%=income20141020%>,
-2014-10-19: <%=income20141019%>,
-2014-10-18: <%=income20141018%>,
-2014-10-17: <%=income20141017%>,
-2014-10-16: <%=income20141016%>,
-2014-10-15: <%=income20141015%>,
-2014-10-14: <%=income20141014%>,
-2014-10-13: <%=income20141013%>,
-2014-10-12: <%=income20141012%>,
-2014-10-11: <%=income20141011%>,
-2014-10-10: <%=income20141010%>,
-2014-10-09: <%=income20141009%>,
-2014-10-08: <%=income20141008%>,
-2014-10-07: <%=income20141007%>,
-2014-10-06: <%=income20141006%>,
-2014-10-05: <%=income20141005%>,
-2014-10-04: <%=income20141004%>,
-2014-10-03: <%=income20141003%>,
-2014-10-02: <%=income20141002%>,
-2014-10-01: <%=income20141001%>,
-2014-09-30: <%=income20140930%>,
-2014-09-29: <%=income20140929%>,
-2014-09-28: <%=income20140928%>,
-2014-09-27: <%=income20140927%>,
-2014-09-26: <%=income20140926%>,
-2014-09-25: <%=income20140925%>,
-2014-09-24: <%=income20140924%>,
-2014-09-23: <%=income20140923%>,
-2014-09-22: <%=income20140922%>,
-2014-09-21: <%=income20140921%>,
+<%!
+private String getDefault(String income) {
+	return (income == null || "".equals(income)) ? "0.00" : income;
 }
+%>
+
+<%
+boolean refreshCache = false;
+String sRefreshCache = request.getParameter("refreshCache");
+if (sRefreshCache != null) {
+	refreshCache = true;
+}
+
+String income20141022 = retrieveWithCache("2014-10-21", "2014-10-22", refreshCache);
+String income20141021 = retrieveWithCache("2014-10-20", "2014-10-21", refreshCache);
+String income20141020 = retrieveWithCache("2014-10-19", "2014-10-20", refreshCache);
+String income20141019 = retrieveWithCache("2014-10-18", "2014-10-19", refreshCache);
+String income20141018 = retrieveWithCache("2014-10-17", "2014-10-18", refreshCache);
+String income20141017 = retrieveWithCache("2014-10-16", "2014-10-17", refreshCache);
+String income20141016 = retrieveWithCache("2014-10-15", "2014-10-16", refreshCache);
+String income20141015 = retrieveWithCache("2014-10-14", "2014-10-15", refreshCache);
+String income20141014 = retrieveWithCache("2014-10-13", "2014-10-14", refreshCache);
+String income20141013 = retrieveWithCache("2014-10-12", "2014-10-13", refreshCache);
+String income20141012 = retrieveWithCache("2014-10-11", "2014-10-12", refreshCache);
+String income20141011 = retrieveWithCache("2014-10-10", "2014-10-11", refreshCache);
+String income20141010 = retrieveWithCache("2014-10-09", "2014-10-10", refreshCache);
+String income20141009 = retrieveWithCache("2014-10-08", "2014-10-09", refreshCache);
+String income20141008 = retrieveWithCache("2014-10-07", "2014-10-08", refreshCache);
+String income20141007 = retrieveWithCache("2014-10-06", "2014-10-07", refreshCache);
+String income20141006 = retrieveWithCache("2014-10-05", "2014-10-06", refreshCache);
+String income20141005 = retrieveWithCache("2014-10-04", "2014-10-05", refreshCache);
+String income20141004 = retrieveWithCache("2014-10-03", "2014-10-04", refreshCache);
+String income20141003 = retrieveWithCache("2014-10-02", "2014-10-03", refreshCache);
+String income20141002 = retrieveWithCache("2014-10-01", "2014-10-02", refreshCache);
+String income20141001 = retrieveWithCache("2014-09-30", "2014-10-01", refreshCache);
+String income20140930 = retrieveWithCache("2014-09-29", "2014-09-30", refreshCache);
+String income20140929 = retrieveWithCache("2014-09-28", "2014-09-29", refreshCache);
+String income20140928 = retrieveWithCache("2014-09-27", "2014-09-28", refreshCache);
+String income20140927 = retrieveWithCache("2014-09-26", "2014-09-27", refreshCache);
+String income20140926 = retrieveWithCache("2014-09-25", "2014-09-26", refreshCache);
+String income20140925 = retrieveWithCache("2014-09-24", "2014-09-25", refreshCache);
+String income20140924 = retrieveWithCache("2014-09-23", "2014-09-24", refreshCache);
+String income20140923 = retrieveWithCache("2014-09-22", "2014-09-23", refreshCache);
+String income20140922 = retrieveWithCache("2014-09-21", "2014-09-22", refreshCache);
+String income20140921 = retrieveWithCache("2014-09-20", "2014-09-21", refreshCache);
+%>
+
+[
+{
+	day: 0,
+	revenue: <%=income20140921%>,
+},
+{
+	day: 1,
+	revenue: <%=income20140922%>,
+},
+{
+	day: 2,
+	revenue: <%=income20140923%>,
+},
+{
+	day: 3,
+	revenue: <%=income20140924%>,
+},
+{
+	day: 4,
+	revenue: <%=income20140925%>,
+},
+{
+	day: 5,
+	revenue: <%=income20140926%>,
+},
+{
+	day: 6,
+	revenue: <%=income20140927%>,
+},
+{
+	day: 7,
+	revenue: <%=income20140928%>,
+},
+{
+	day: 8,
+	revenue: <%=income20140929%>,
+},
+{
+	day: 9,
+	revenue: <%=income20140930%>,
+},
+{
+	day: 10,
+	revenue: <%=income20141001%>,
+},
+{
+	day: 11,
+	revenue: <%=income20141002%>,
+},
+{
+	day: 12,
+	revenue: <%=income20141003%>,
+},
+{
+	day: 13,
+	revenue: <%=income20141004%>,
+},
+{
+	day: 14,
+	revenue: <%=income20141005%>,
+},
+{
+	day: 15,
+	revenue: <%=income20141006%>,
+},
+{
+	day: 16,
+	revenue: <%=income20141007%>,
+},
+{
+	day: 17,
+	revenue: <%=income20141008%>,
+},
+{
+	day: 18,
+	revenue: <%=income20141009%>,
+},
+{
+	day: 19,
+	revenue: <%=income20141010%>,
+},
+{
+	day: 20,
+	revenue: <%=income20141011%>,
+},
+{
+	day: 21,
+	revenue: <%=income20141012%>,
+},
+{
+	day: 22,
+	revenue: <%=income20141013%>,
+},
+{
+	day: 23,
+	revenue: <%=income20141014%>,
+},
+{
+	day: 24,
+	revenue: <%=income20141015%>,
+},
+{
+	day: 25,
+	revenue: <%=income20141016%>,
+},
+{
+	day: 26,
+	revenue: <%=income20141017%>,
+},
+{
+	day: 27,
+	revenue: <%=income20141018%>,
+},
+{
+	day: 28,
+	revenue: <%=income20141019%>,
+},
+{
+	day: 29,
+	revenue: <%=income20141020%>,
+},
+{
+	day: 30,
+	revenue: <%=income20141021%>,
+},
+]
 
